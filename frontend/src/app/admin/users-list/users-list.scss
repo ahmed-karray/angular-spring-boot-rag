@@ -1,0 +1,101 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/buttons';
+@use '../../../styles/tables';
+
+.page-content {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: $space-2xl $space-lg;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: $space-lg;
+  color: $color-primary;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: $fw-medium;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.page-header {
+  margin-bottom: $space-xl;
+
+  h1 {
+    font-size: 26px;
+    margin: 0 0 4px;
+  }
+
+  .page-subtitle {
+    color: $color-text-secondary;
+    margin: 0;
+  }
+}
+
+.error-message {
+  color: $color-danger;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: $radius-sm;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: $space-lg;
+  animation: fadeIn $transition-fast;
+}
+
+.data-table-wrapper {
+  overflow-x: auto;
+}
+
+.username-cell {
+  font-weight: $fw-medium;
+}
+
+.cell-input {
+  width: 100%;
+  min-width: 90px;
+  padding: 6px 8px;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  font-size: 13px;
+  font-family: $font-family;
+  transition: border-color $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+  }
+}
+
+.actions-cell {
+  display: flex;
+  gap: $space-sm;
+  white-space: nowrap;
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: $space-2xl;
+  color: $color-text-secondary;
+
+  &__icon {
+    display: block;
+    font-size: 32px;
+    margin-bottom: $space-sm;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}

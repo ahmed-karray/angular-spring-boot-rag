@@ -1,0 +1,107 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+@use '../../styles/buttons';
+
+.app-shell {
+  min-height: 100vh;
+  background: $color-bg;
+}
+
+.navbar {
+  @include flex-between;
+  padding: $space-md $space-xl;
+  background: $color-card;
+  border-bottom: 1px solid $color-border;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+  }
+
+  &__logo {
+    font-size: 20px;
+    color: $color-primary;
+  }
+
+  &__title {
+    font-weight: $fw-semibold;
+    font-size: 16px;
+    color: $color-secondary;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-md;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+    font-size: 14px;
+    font-weight: $fw-medium;
+    color: $color-text-primary;
+  }
+}
+
+.page-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: $space-2xl $space-lg;
+}
+
+.page-header {
+  margin-bottom: $space-xl;
+  animation: fadeIn $transition-slow;
+
+  h1 {
+    font-size: 28px;
+    margin: 0 0 $space-xs;
+  }
+
+  .page-subtitle {
+    color: $color-text-secondary;
+    font-size: 15px;
+    margin: 0;
+  }
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: $space-lg;
+}
+
+.action-card {
+  @include card;
+  @include card-hover;
+  display: flex;
+  align-items: flex-start;
+  gap: $space-md;
+  padding: $space-lg;
+  text-decoration: none;
+  color: inherit;
+  animation: scaleIn $transition-base;
+
+  &__icon {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  h3 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    color: $color-secondary;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: $color-text-secondary;
+  }
+}

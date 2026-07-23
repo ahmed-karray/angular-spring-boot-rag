@@ -1,0 +1,63 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.data-table-wrapper {
+  @include card;
+  overflow: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  thead {
+    position: sticky;
+    top: 0;
+    background: $color-bg;
+    z-index: 1;
+  }
+
+  th {
+    text-align: left;
+    padding: 14px 16px;
+    font-weight: $fw-semibold;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: $color-text-secondary;
+    border-bottom: 1px solid $color-border;
+  }
+
+  td {
+    padding: 14px 16px;
+    color: $color-text-primary;
+    border-bottom: 1px solid $color-border;
+  }
+
+  tbody tr {
+    transition: background $transition-fast;
+
+    &:hover {
+      background: $color-bg;
+    }
+
+    &:nth-child(even) {
+      background: rgba(248, 250, 252, 0.5);
+    }
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: $fw-medium;
+
+  &--success { background: rgba(16, 185, 129, 0.12); color: $color-success; }
+  &--warning { background: rgba(245, 158, 11, 0.12); color: $color-warning; }
+  &--danger  { background: rgba(239, 68, 68, 0.12); color: $color-danger; }
+  &--info    { background: rgba(37, 99, 235, 0.12); color: $color-primary; }
+}

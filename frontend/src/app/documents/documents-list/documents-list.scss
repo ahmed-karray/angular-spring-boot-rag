@@ -1,0 +1,189 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/buttons';
+@use '../../../styles/tables';
+
+.page-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: $space-2xl $space-lg;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: $space-lg;
+  color: $color-primary;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: $fw-medium;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.page-header {
+  margin-bottom: $space-xl;
+
+  h1 {
+    font-size: 26px;
+    margin: 0 0 4px;
+  }
+
+  .page-subtitle {
+    color: $color-text-secondary;
+    margin: 0;
+  }
+}
+
+.error-message {
+  color: $color-danger;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: $radius-sm;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: $space-lg;
+  animation: fadeIn $transition-fast;
+}
+
+.upload-card {
+  @include card;
+  padding: $space-lg;
+  margin-bottom: $space-lg;
+
+  &__row {
+    display: flex;
+    gap: $space-md;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+.file-input {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border: 1px dashed $color-border;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  font-size: 14px;
+  color: $color-text-secondary;
+  transition: border-color $transition-fast, background $transition-fast;
+
+  &:hover {
+    border-color: $color-primary;
+    background: rgba(37, 99, 235, 0.03);
+  }
+
+  input {
+    display: none;
+  }
+}
+
+.tags-input {
+  @include input-base;
+  flex: 1;
+  min-width: 200px;
+}
+
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  margin-bottom: $space-lg;
+
+  input, select {
+    @include input-base;
+    width: auto;
+    flex: 1;
+    min-width: 140px;
+  }
+}
+
+.filename-cell {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  font-weight: $fw-medium;
+}
+
+.file-icon {
+  font-size: 16px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.actions-cell {
+  display: flex;
+  gap: $space-sm;
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: $space-2xl;
+  color: $color-text-secondary;
+
+  &__icon {
+    display: block;
+    font-size: 32px;
+    margin-bottom: $space-sm;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn $transition-fast;
+}
+
+.modal {
+  @include card;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: $space-xl;
+  animation: scaleIn $transition-base;
+
+  h3 {
+    margin: 0 0 $space-lg;
+    font-size: 17px;
+  }
+
+  .file-input {
+    width: 100%;
+    margin-bottom: $space-md;
+  }
+
+  .tags-input {
+    margin-bottom: $space-lg;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-sm;
+    margin-top: $space-lg;
+  }
+}
+}

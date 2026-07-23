@@ -1,0 +1,28 @@
+<div class="auth-page">
+  <div class="auth-container verify-notice">
+    @switch (status()) {
+      @case ('idle') {
+        <span class="verify-notice__icon">📧</span>
+        <h2>Confirm your email</h2>
+        <p class="subtitle">Click the button below to activate your account.</p>
+        <button class="btn btn--primary" (click)="confirmEmail()">Confirm My Email</button>
+      }
+      @case ('loading') {
+        <span class="verify-notice__icon">⏳</span>
+        <h2>Verifying your email...</h2>
+      }
+      @case ('success') {
+        <span class="verify-notice__icon">✅</span>
+        <h2>Email verified!</h2>
+        <p class="subtitle">Your account is now active. You can log in.</p>
+        <a routerLink="/login" class="btn btn--primary">Go to Login</a>
+      }
+      @case ('error') {
+        <span class="verify-notice__icon">⚠️</span>
+        <h2>Verification failed</h2>
+        <p class="subtitle">{{ errorMessage() }}</p>
+        <a routerLink="/login" class="btn btn--secondary">Back to Login</a>
+      }
+    }
+  </div>
+</div>
