@@ -55,4 +55,7 @@ export class Documents {
 getVersionHistory(documentId: number): Observable<DocumentItem[]> {
   return this.http.get<DocumentItem[]>(`${this.baseUrl}/${documentId}/versions`);
 }
+updateSharing(documentId: number, visibility: string, usernames: string[]): Observable<DocumentItem> {
+  return this.http.put<DocumentItem>(`${this.baseUrl}/${documentId}/sharing`, { visibility, usernames });
+}
 }

@@ -165,4 +165,36 @@ export class DocumentsList implements OnInit {
       error: err => this.errorMessage.set(err.error?.error ?? 'Failed to upload new version'),
     });
   }
+  // --- Sharing ---
+sharingFor = signal<DocumentItem | null>(null);
+shareVisibility = signal<'PRIVATE' | 'DEPARTMENT' | 'SPECIFIC_USERS' | 'PUBLIC'>('PUBLIC');
+shareUsernamesInput = signal('');
+
+openSharing(doc: DocumentItem) {
+  this.sharingFor.set(doc);
+  this.shareVisibility.set(doc.visibility);
+  this.shareUsernamesInput.set(doc.sharedWithUsernames.join(', '));
+}
+
+closeSharing() {
+  this.sharingFor.set(null);
+}
+
+submitSharing() {
+  const doc = this.sharingFor();
+  if (!doc) return;
+
+  const usernames = this.shareUsernamesInput()
+    .split(',')
+    .map(u => u.trim())
+    .filter(u => u.length > 0);
+
+  this.docsService.updateSharing(doc.id, this.shareVisibility(), usernames).subscribe({
+    next: () => {
+      this.closeSharing();
+      this.loadDocuments();
+    },
+    error: err => this.errorMessage.set(err.error?.error ?? 'Failed to update sharing'),
+  });
+}
 }

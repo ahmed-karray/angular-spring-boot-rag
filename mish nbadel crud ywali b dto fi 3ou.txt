@@ -1,0 +1,35 @@
+mish nbadel crud ywali b dto fi 3oudh responseentity page record lenna 
+juste les donnes nécessaires yetsavew
+3ana mapper mish yorbet binet dto wil entite mapstruct objectmapper
+nbadel h2 MySQL bil postgre
+Lombok
+liquibase wala flyway
+
+rakah fazet rules 
+
+
+Toward your original RAG goal
+PDF text extraction — when a document is uploaded, extract its text content (e.g. with Apache PDFBox) and store it, so it's ready for chunking/embedding later
+Chunking + embeddings — split extracted text into chunks, generate vector embeddings (via OpenAI/local model), store them (pgvector extension works great with your existing Postgres setup)
+Semantic search — replace/augment your current filename-based search with "search by meaning" using those embeddings
+Chat-with-documents endpoint — the actual RAG payoff: ask a question, retrieve relevant chunks, feed them + the question to an LLM, return an answer with citations
+
+
+
+Auth & user experience
+Refresh tokens — currently your JWT just expires and logs the user out; refresh tokens allow silent renewal without forcing re-login
+Account activity log — "last login", audit trail of admin actions
+Documents
+Versioning — re-upload a document as a new version instead of a totally separate file, keep history
+Sharing/permissions — share a specific document with a specific user or department instead of "everyone sees everything"
+Preview in-browser — render the PDF inline instead of forcing a download (using pdf.js)
+Bulk actions — select multiple documents, delete/tag/download as zip in one action
+Admin & ops
+Pagination — your tables load everything at once; fine now, but will matter once you have real data volume
+Activity dashboard — charts (users over time, documents per department, storage used) using something like ngx-charts
+Email notifications — e.g. notify a user when someone comments/shares a document with them
+Engineering polish (since your supervisor cares about this)
+Unit + integration tests — JUnit/Mockito on the backend, Jasmine/Karma on Angular — you have zero tests right now, which is a notable gap for a "production-quality" project
+API documentation — Swagger/OpenAPI auto-generated docs for your REST endpoints
+Docker Compose — containerize Postgres + backend + frontend so the whole thing spins up with one command
+CI/CD — GitHub Actions running build + tests on every push

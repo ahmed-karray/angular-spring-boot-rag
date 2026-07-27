@@ -55,6 +55,7 @@
           <th>Uploaded By</th>
           <th>Department</th>
           <th>Tags</th>
+          <th>Visibility</th>
           <th>Size</th>
           <th>Uploaded</th>
           <th>Actions</th>
@@ -87,12 +88,22 @@
                 —
               }
             </td>
+            <td>
+  @switch (doc.visibility) {
+    @case ('PUBLIC') { <span class="badge badge--success">Public</span> }
+    @case ('DEPARTMENT') { <span class="badge badge--info">Department</span> }
+    @case ('SPECIFIC_USERS') { <span class="badge badge--warning">Shared</span> }
+    @case ('PRIVATE') { <span class="badge badge--danger">Private</span> }
+  }
+</td>
+
             <td>{{ formatSize(doc.size) }}</td>
             <td>{{ doc.uploadedAt | date: 'short' }}</td>
             <td class="actions-cell">
               <button class="btn btn--outline" (click)="downloadFile(doc)">Download</button>
               <button class="btn btn--secondary" (click)="openHistory(doc)">Versions</button>
               <button class="btn btn--secondary" (click)="openVersionUpload(doc)">New Version</button>
+              <button class="btn btn--secondary" (click)="openSharing(doc)">Share</button>
               <button class="btn btn--danger" (click)="deleteDocument(doc.id)">Delete</button>
             </td>
           </tr>
@@ -175,4 +186,43 @@
       </div>
     </div>
   }
+  @if (sharingFor(); as shareDoc) {
+  <div class="modal-overlay" (click)="closeSharing()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h3>Share — {{ shareDoc.filename }}</h3>
+
+      <div class="field">
+        <label>Visibility</label>
+        <select
+          [ngModel]="shareVisibility()"
+          (ngModelChange)="shareVisibility.set($event)"
+          [ngModelOptions]="{standalone: true}"
+        >
+          <option value="PRIVATE">Private (only me)</option>
+          <option value="DEPARTMENT">My department only</option>
+          <option value="SPECIFIC_USERS">Specific people</option>
+          <option value="PUBLIC">Everyone</option>
+        </select>
+      </div>
+
+      @if (shareVisibility() === 'SPECIFIC_USERS') {
+        <div class="field">
+          <label>Usernames (comma separated)</label>
+          <input
+            type="text"
+            placeholder="e.g. ahmed, fatma"
+            [ngModel]="shareUsernamesInput()"
+            (ngModelChange)="shareUsernamesInput.set($event)"
+            [ngModelOptions]="{standalone: true}"
+          />
+        </div>
+      }
+
+      <div class="modal__actions">
+        <button class="btn btn--secondary" (click)="closeSharing()">Cancel</button>
+        <button class="btn btn--primary" (click)="submitSharing()">Save</button>
+      </div>
+    </div>
+  </div>
+}
 </div>

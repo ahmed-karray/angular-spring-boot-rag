@@ -32,11 +32,11 @@
   td {
     padding: 14px 16px;
     color: $color-text-primary;
-    border-bottom: 1px solid $color-border;
   }
 
   tbody tr {
     transition: background $transition-fast;
+    border-bottom: 1px solid $color-border;
 
     &:hover {
       background: $color-bg;

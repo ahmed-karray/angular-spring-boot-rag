@@ -10,4 +10,6 @@ export interface DocumentItem {
   rootDocumentId: number;
   versionNumber: number;
   isLatest: boolean;
+  visibility: 'PRIVATE' | 'DEPARTMENT' | 'SPECIFIC_USERS' | 'PUBLIC';
+  sharedWithUsernames: string[];
 }
