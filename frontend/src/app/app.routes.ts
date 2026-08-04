@@ -1,15 +1,14 @@
 import { Routes } from '@angular/router';
-import { Login } from './auth/login/login';
-import { Signup } from './auth/signup/signup';
-import { Home } from './home/home';
-import { UsersList } from './admin/users-list/users-list';
-import { authGuard } from './auth/auth.guard';
-import { DocumentsList } from './documents/documents-list/documents-list';
-import { Profile } from './profile/profile';
-import { VerifyEmail } from './auth/verify-email/verify-email';
-import { ForgotPassword } from './auth/forgot-password/forgot-password';
-import { ResetPassword } from './auth/reset-password/reset-password';
-
+import { Login } from './features/auth/components/login/login';
+import { Signup } from './features/auth/components/signup/signup';
+import { Home } from './features/home/components/home';
+import { UsersList } from './features/admin/components/users-list/users-list';
+import { authGuard } from './core/guards/auth.guard';
+import { DocumentsList } from './features/documents/components/documents-list/documents-list';
+import { Profile } from './features/profile/components/profile';
+import { VerifyEmail } from './features/auth/components/verify-email/verify-email';
+import { ForgotPassword } from './features/auth/components/forgot-password/forgot-password';
+import { ResetPassword } from './features/auth/components/reset-password/reset-password';
 
 export const routes: Routes = [
   { path: 'login', component: Login },

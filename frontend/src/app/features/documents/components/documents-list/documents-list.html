@@ -1,0 +1,257 @@
+<div class="page-content">
+  <a routerLink="/home" class="back-link">← Back to Home</a>
+
+  <header class="page-header">
+    <h1>My Documents</h1>
+    <p class="page-subtitle">Upload, search, and manage shared documents</p>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  }
+
+  <div class="upload-card">
+    <div class="upload-card__row">
+      <label class="file-input">
+        <input type="file" accept="application/pdf" (change)="onFileSelected($event)" />
+        <span>{{ selectedFile()?.name || 'Choose a PDF file' }}</span>
+      </label>
+
+      <input
+        type="text"
+        class="tags-input"
+        placeholder="Tags (comma separated)"
+        [ngModel]="uploadTagsInput()"
+        (ngModelChange)="uploadTagsInput.set($event)"
+        [ngModelOptions]="{ standalone: true }"
+      />
+
+      <button class="btn btn--primary" (click)="uploadFile()" [disabled]="!selectedFile()">
+        Upload PDF
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="filterForm" class="filters-bar">
+    <input type="text" placeholder="Search by name..." formControlName="name" />
+    <input type="text" placeholder="Uploaded by..." formControlName="uploadedBy" />
+    <input type="text" placeholder="Tag..." formControlName="tag" />
+    <input type="date" formControlName="fromDate" />
+    <input type="date" formControlName="toDate" />
+    <select formControlName="department">
+      <option value="">All departments</option>
+      @for (dep of departments; track dep) {
+        <option [value]="dep">{{ dep }}</option>
+      }
+    </select>
+  </form>
+
+  <div class="data-table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Filename</th>
+          <th>Version</th>
+          <th>Uploaded By</th>
+          <th>Department</th>
+          <th>Tags</th>
+          <th>Visibility</th>
+          <th>Extraction</th>
+          <th>Size</th>
+          <th>Uploaded</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (doc of documents(); track doc.id) {
+          <tr>
+            <td class="filename-cell">
+              <span class="file-icon">📄</span>
+              {{ doc.filename }}
+            </td>
+            <td>
+              <span class="badge badge--info">v{{ doc.versionNumber }}</span>
+            </td>
+            <td>{{ doc.uploadedByUsername }}</td>
+            <td>
+              @if (doc.uploadedByDepartment) {
+                <span class="badge badge--info">{{ doc.uploadedByDepartment }}</span>
+              } @else {
+                —
+              }
+            </td>
+            <td>
+              @if (doc.tags.length) {
+                <span class="tag-list">
+                  @for (tag of doc.tags; track tag) {
+                    <span class="badge badge--success">{{ tag }}</span>
+                  }
+                </span>
+              } @else {
+                —
+              }
+            </td>
+            <td>
+              @switch (doc.visibility) {
+                @case ('PUBLIC') {
+                  <span class="badge badge--success">Public</span>
+                }
+                @case ('DEPARTMENT') {
+                  <span class="badge badge--info">Department</span>
+                }
+                @case ('SPECIFIC_USERS') {
+                  <span class="badge badge--warning">Shared</span>
+                }
+                @case ('PRIVATE') {
+                  <span class="badge badge--danger">Private</span>
+                }
+              }
+            </td>
+            <td>
+              <span class="badge" [class]="extractionBadgeClass(doc.extractionStatus)">
+                {{ extractionLabel(doc) }}
+              </span>
+            </td>
+            <td>{{ formatSize(doc.size) }}</td>
+            <td>{{ doc.uploadedAt | date: 'short' }}</td>
+            <td class="actions-cell">
+              <button class="btn btn--outline" (click)="downloadFile(doc)">Download</button>
+              <button class="btn btn--secondary" (click)="openHistory(doc)">Versions</button>
+              <button class="btn btn--secondary" (click)="openVersionUpload(doc)">
+                New Version
+              </button>
+              <button class="btn btn--secondary" (click)="openSharing(doc)">Share</button>
+              <button class="btn btn--danger" (click)="deleteDocument(doc.id)">Delete</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="9" class="empty-state">
+              <span class="empty-state__icon">📭</span>
+              <p>No documents found. Try adjusting your filters or upload a new PDF.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (viewingHistoryFor(); as histDoc) {
+    <div class="modal-overlay" (click)="closeHistory()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h3>Version history — {{ histDoc.filename }}</h3>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Uploaded</th>
+              <th>Size</th>
+              <th>Status</th>
+              <th>Extraction</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (v of versionHistory(); track v.id) {
+              <tr>
+                <td>v{{ v.versionNumber }}</td>
+                <td>{{ v.uploadedAt | date: 'short' }}</td>
+                <td>{{ formatSize(v.size) }}</td>
+                <td>
+                  @if (v.isLatest) {
+                    <span class="badge badge--success">Latest</span>
+                  } @else {
+                    <span class="badge badge--info">Archived</span>
+                  }
+                </td>
+                <td>
+                  <span class="badge" [class]="extractionBadgeClass(v.extractionStatus)">
+                    {{ extractionLabel(v) }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn--outline" (click)="downloadFile(v)">Download</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <button class="btn btn--secondary" (click)="closeHistory()">Close</button>
+      </div>
+    </div>
+  }
+
+  @if (versioningFor(); as verDoc) {
+    <div class="modal-overlay" (click)="closeVersionUpload()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h3>Upload new version — {{ verDoc.filename }}</h3>
+
+        <label class="file-input">
+          <input type="file" accept="application/pdf" (change)="onNewVersionFileSelected($event)" />
+          <span>{{ newVersionFile()?.name || 'Choose a PDF file' }}</span>
+        </label>
+
+        <input
+          type="text"
+          class="tags-input"
+          placeholder="Tags (comma separated)"
+          [ngModel]="newVersionTagsInput()"
+          (ngModelChange)="newVersionTagsInput.set($event)"
+          [ngModelOptions]="{ standalone: true }"
+        />
+
+        <div class="modal__actions">
+          <button class="btn btn--secondary" (click)="closeVersionUpload()">Cancel</button>
+          <button
+            class="btn btn--primary"
+            (click)="submitNewVersion()"
+            [disabled]="!newVersionFile()"
+          >
+            Upload
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+  @if (sharingFor(); as shareDoc) {
+    <div class="modal-overlay" (click)="closeSharing()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h3>Share — {{ shareDoc.filename }}</h3>
+
+        <div class="field">
+          <label>Visibility</label>
+          <select
+            [ngModel]="shareVisibility()"
+            (ngModelChange)="shareVisibility.set($event)"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option value="PRIVATE">Private (only me)</option>
+            <option value="DEPARTMENT">My department only</option>
+            <option value="SPECIFIC_USERS">Specific people</option>
+            <option value="PUBLIC">Everyone</option>
+          </select>
+        </div>
+
+        @if (shareVisibility() === 'SPECIFIC_USERS') {
+          <div class="field">
+            <label>Usernames (comma separated)</label>
+            <input
+              type="text"
+              placeholder="e.g. ahmed, fatma"
+              [ngModel]="shareUsernamesInput()"
+              (ngModelChange)="shareUsernamesInput.set($event)"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </div>
+        }
+
+        <div class="modal__actions">
+          <button class="btn btn--secondary" (click)="closeSharing()">Cancel</button>
+          <button class="btn btn--primary" (click)="submitSharing()">Save</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

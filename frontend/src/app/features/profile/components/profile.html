@@ -1,0 +1,113 @@
+<div class="page-content">
+  <a routerLink="/home" class="back-link">← Back to Home</a>
+
+  <header class="page-header">
+    <h1>My Profile</h1>
+    <p class="page-subtitle">Manage your personal information and password</p>
+  </header>
+
+  <div class="profile-card">
+    <h2>Personal Information</h2>
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+      <div class="form-grid-2">
+        <div class="field">
+          <input type="text" formControlName="username" placeholder=" " id="username" />
+          <label for="username">Username</label>
+        </div>
+        <div class="field">
+          <input type="email" formControlName="email" placeholder=" " id="email" />
+          <label for="email">Email</label>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field">
+          <input type="text" formControlName="firstName" placeholder=" " id="firstName" />
+          <label for="firstName">First name</label>
+        </div>
+        <div class="field">
+          <input type="text" formControlName="lastName" placeholder=" " id="lastName" />
+          <label for="lastName">Last name</label>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field">
+          <input type="text" formControlName="phoneNumber" placeholder=" " id="phoneNumber" />
+          <label for="phoneNumber">Phone number</label>
+        </div>
+        <div class="field">
+          <input type="number" formControlName="age" placeholder=" " id="age" />
+          <label for="age">Age</label>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <select formControlName="department">
+          <option value="">Select department</option>
+          @for (dep of departments; track dep) {
+            <option [value]="dep">{{ dep }}</option>
+          }
+        </select>
+
+        <select formControlName="gender">
+          <option value="">Select gender</option>
+          @for (g of genders; track g) {
+            <option [value]="g">{{ g }}</option>
+          }
+        </select>
+      </div>
+
+      @if (profileError()) {
+        <p class="error-message">{{ profileError() }}</p>
+      }
+      @if (profileSuccess()) {
+        <p class="success-message">{{ profileSuccess() }}</p>
+      }
+
+      <button type="submit" class="btn btn--primary" [disabled]="profileForm.invalid">Save Changes</button>
+    </form>
+  </div>
+
+  <div class="profile-card">
+  <h2>Change Password</h2>
+  <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+    <div class="field password-field">
+      <input [type]="showCurrentPassword() ? 'text' : 'password'" formControlName="currentPassword" placeholder=" " id="currentPassword" />
+      <label for="currentPassword">Current password</label>
+      <button type="button" class="toggle-visibility" (click)="showCurrentPassword.set(!showCurrentPassword())">
+        {{ showCurrentPassword() ? 'Hide' : 'Show' }}
+      </button>
+    </div>
+
+    <div class="field password-field">
+      <input [type]="showNewPassword() ? 'text' : 'password'" formControlName="newPassword" placeholder=" " id="newPassword" />
+      <label for="newPassword">New password</label>
+      <button type="button" class="toggle-visibility" (click)="showNewPassword.set(!showNewPassword())">
+        {{ showNewPassword() ? 'Hide' : 'Show' }}
+      </button>
+    </div>
+
+    <div class="field password-field">
+      <input [type]="showConfirmPassword() ? 'text' : 'password'" formControlName="confirmPassword" placeholder=" " id="confirmPassword" />
+      <label for="confirmPassword">Confirm new password</label>
+      <button type="button" class="toggle-visibility" (click)="showConfirmPassword.set(!showConfirmPassword())">
+        {{ showConfirmPassword() ? 'Hide' : 'Show' }}
+      </button>
+    </div>
+
+    @if (passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched) {
+      <p class="error-message">Passwords do not match</p>
+    }
+
+    @if (passwordError()) {
+      <p class="error-message">{{ passwordError() }}</p>
+    }
+    @if (passwordSuccess()) {
+      <p class="success-message">{{ passwordSuccess() }}</p>
+    }
+
+    <button type="submit" class="btn btn--secondary" [disabled]="passwordForm.invalid">Update Password</button>
+  </form>
+</div>
+</div>

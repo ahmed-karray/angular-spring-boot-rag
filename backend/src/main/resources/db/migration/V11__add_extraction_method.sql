@@ -1,0 +1,1 @@
+ALTER TABLE documents ADD COLUMN extraction_method VARCHAR(20);

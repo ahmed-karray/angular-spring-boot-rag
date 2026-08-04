@@ -1,0 +1,83 @@
+<div class="auth-page">
+  <div class="auth-container">
+    @if (signupSuccess()) {
+      <div class="verify-notice">
+        <span class="verify-notice__icon">📧</span>
+        <h2>Check your email</h2>
+        <p class="subtitle">We've sent a verification link to your inbox. Click it to activate your account, then log in.</p>
+        <a routerLink="/login" class="btn btn--primary">Go to Login</a>
+      </div>
+    } @else {
+      <h2>Create your account</h2>
+      <p class="subtitle">Join us — it only takes a minute</p>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="field">
+          <input type="text" formControlName="username" placeholder=" " id="username" />
+          <label for="username">Username</label>
+        </div>
+
+        <div class="field">
+          <input type="email" formControlName="email" placeholder=" " id="email" />
+          <label for="email">Email</label>
+        </div>
+
+        <div class="field password-field">
+          <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" placeholder=" " id="password" />
+          <label for="password">Password</label>
+          <button type="button" class="toggle-visibility" (click)="showPassword.set(!showPassword())">
+            {{ showPassword() ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="field">
+            <input type="text" formControlName="firstName" placeholder=" " id="firstName" />
+            <label for="firstName">First name</label>
+          </div>
+          <div class="field">
+            <input type="text" formControlName="lastName" placeholder=" " id="lastName" />
+            <label for="lastName">Last name</label>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="field">
+            <input type="text" formControlName="phoneNumber" placeholder=" " id="phoneNumber" />
+            <label for="phoneNumber">Phone number</label>
+          </div>
+          <div class="field">
+            <input type="number" formControlName="age" placeholder=" " id="age" />
+            <label for="age">Age</label>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <select formControlName="department">
+            <option value="" disabled selected>Select department</option>
+            @for (dep of departments; track dep) {
+              <option [value]="dep">{{ dep }}</option>
+            }
+          </select>
+
+          <select formControlName="gender">
+            <option value="" disabled selected>Select gender</option>
+            @for (g of genders; track g) {
+              <option [value]="g">{{ g }}</option>
+            }
+          </select>
+        </div>
+
+        @if (errorMessage()) {
+          <p class="error-message">{{ errorMessage() }}</p>
+        }
+
+      <button type="submit" [disabled]="form.invalid || submitting()">
+        {{ submitting() ? 'Verifying...' : 'Sign Up' }}
+      </button>
+      </form>
+
+      <p class="footer-link">Already have an account? <a routerLink="/login">Login</a></p>
+    }
+  </div>
+</div>

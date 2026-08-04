@@ -1,0 +1,36 @@
+<div class="auth-page">
+  <div class="auth-container">
+    <h2>Welcome back</h2>
+    <p class="subtitle">Log in to continue to your dashboard</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <input type="text" formControlName="username" placeholder=" " id="username" />
+        <label for="username">Username</label>
+      </div>
+
+      <div class="field password-field">
+        <input
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="password"
+          placeholder=" "
+          id="password"
+        />
+        <label for="password">Password</label>
+        <button type="button" class="toggle-visibility" (click)="showPassword.set(!showPassword())">
+          {{ showPassword() ? 'Hide' : 'Show' }}
+        </button>
+      </div>
+
+      <a routerLink="/forgot-password" class="forgot-link">Forgot password?</a>
+
+      @if (errorMessage()) {
+        <p class="error-message">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="form.invalid">Login</button>
+    </form>
+
+    <p class="footer-link">No account? <a routerLink="/signup">Sign up</a></p>
+  </div>
+</div>

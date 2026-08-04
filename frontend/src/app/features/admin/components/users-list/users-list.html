@@ -1,0 +1,108 @@
+<div class="page-content">
+  <a routerLink="/home" class="back-link">← Back to Home</a>
+
+  <header class="page-header">
+    <h1>User Management</h1>
+    <p class="page-subtitle">View, edit, and manage all registered users</p>
+  </header>
+
+  @if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  }
+
+  <div class="data-table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Phone</th>
+          <th>Department</th>
+          <th>Gender</th>
+          <th>Age</th>
+          <th>Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users(); track user.id) {
+          <tr>
+            <td>{{ user.id }}</td>
+
+            @if (editingId() === user.id) {
+              <td><input class="cell-input" [(ngModel)]="editForm.username" /></td>
+              <td><input class="cell-input" [(ngModel)]="editForm.email" /></td>
+              <td>
+                <select class="cell-input" [(ngModel)]="editForm.role">
+                  <option value="USER">USER</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
+              </td>
+              <td><input class="cell-input" [(ngModel)]="editForm.firstName" /></td>
+              <td><input class="cell-input" [(ngModel)]="editForm.lastName" /></td>
+              <td><input class="cell-input" [(ngModel)]="editForm.phoneNumber" /></td>
+              <td>
+                <select class="cell-input" [(ngModel)]="editForm.department">
+                  <option value="">—</option>
+                  @for (dep of departments; track dep) {
+                    <option [value]="dep">{{ dep }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <select class="cell-input" [(ngModel)]="editForm.gender">
+                  <option value="">—</option>
+                  @for (g of genders; track g) {
+                    <option [value]="g">{{ g }}</option>
+                  }
+                </select>
+              </td>
+              <td><input class="cell-input" type="number" [(ngModel)]="editForm.age" /></td>
+              <td>{{ user.createdAt | date: 'short' }}</td>
+              <td class="actions-cell">
+                <button class="btn btn--primary" (click)="saveEdit(user.id)">Save</button>
+                <button class="btn btn--secondary" (click)="cancelEdit()">Cancel</button>
+              </td>
+            } @else {
+              <td class="username-cell">{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <span class="badge" [class.badge--info]="user.role === 'ADMIN'" [class.badge--success]="user.role === 'USER'">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td>{{ user.firstName || '—' }}</td>
+              <td>{{ user.lastName || '—' }}</td>
+              <td>{{ user.phoneNumber || '—' }}</td>
+              <td>
+                @if (user.department) {
+                  <span class="badge badge--info">{{ user.department }}</span>
+                } @else {
+                  —
+                }
+              </td>
+              <td>{{ user.gender || '—' }}</td>
+              <td>{{ user.age ?? '—' }}</td>
+              <td>{{ user.createdAt | date: 'short' }}</td>
+              <td class="actions-cell">
+                <button class="btn btn--outline" (click)="startEdit(user)">Edit</button>
+                <button class="btn btn--danger" (click)="deleteUser(user.id)">Delete</button>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="12" class="empty-state">
+              <span class="empty-state__icon">👤</span>
+              <p>No users found.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
